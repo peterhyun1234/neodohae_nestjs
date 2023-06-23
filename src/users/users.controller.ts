@@ -37,7 +37,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+  @Get('/id/:id')
   @ApiOperation({ summary: 'ID로 사용자 조회' })
   @ApiParam({ name: 'id', required: true, description: '조회할 사용자의 ID' })
   @ApiResponse({
@@ -49,7 +49,23 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Put(':id')
+  @Get('/email/:email')
+  @ApiOperation({ summary: 'Email로 사용자 조회' })
+  @ApiParam({
+    name: 'email',
+    required: true,
+    description: '조회할 사용자의 Email',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '해당 Email의 사용자 정보 반환',
+    type: User,
+  })
+  findOneByEmail(@Param('email') email: string) {
+    return this.usersService.findOneByEmail(email);
+  }
+
+  @Put('/id/:id')
   @ApiOperation({ summary: '사용자 정보 수정' })
   @ApiParam({ name: 'id', required: true, description: '수정할 사용자의 ID' })
   @ApiBody({ type: User, description: '수정할 사용자 정보' })
@@ -62,7 +78,7 @@ export class UsersController {
     return this.usersService.update(id, user);
   }
 
-  @Delete(':id')
+  @Delete('/id/:id')
   @ApiOperation({ summary: '사용자 삭제' })
   @ApiParam({ name: 'id', required: true, description: '삭제할 사용자의 ID' })
   @ApiResponse({ status: 200, description: '사용자 삭제 완료', type: User })

@@ -23,6 +23,10 @@ export class UsersService {
     return this.userModel.findByPk(id);
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ where: { email } });
+  }
+
   // UPDATE
   async update(id: string, user: Partial<User>): Promise<number> {
     const [affectedCount] = await this.userModel.update(user, {

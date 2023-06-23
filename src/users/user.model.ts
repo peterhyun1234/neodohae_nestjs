@@ -21,15 +21,16 @@ export class User extends Model {
   @ApiProperty({ example: 'male', description: '성별' })
   @Column({
     type: DataType.ENUM,
-    values: ['male', 'female'],
-    allowNull: false,
+    values: ['male', 'female', 'undefined'],
+    defaultValue: 'undefined',
+    allowNull: true,
   })
   gender: string;
 
   @ApiProperty({ example: 1990, description: '출생 연도' })
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,
+    allowNull: true,
   })
   birthYear: number;
 }
