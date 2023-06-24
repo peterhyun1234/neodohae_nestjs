@@ -35,11 +35,14 @@ export class User extends Model {
   birthYear: number;
 
   @ApiProperty({
-    example: 'http://example.com/path-to-image.jpg',
+    example:
+      'https://neodohaebucket.s3.ap-northeast-2.amazonaws.com/default_profile.jpeg',
     description: '사용자 프로필 사진 URL',
   })
   @Column({
     type: DataType.STRING,
+    defaultValue:
+      'https://neodohaebucket.s3.ap-northeast-2.amazonaws.com/default_profile.jpeg',
     allowNull: true,
   })
   picture: string;
