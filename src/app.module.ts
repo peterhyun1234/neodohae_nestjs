@@ -3,10 +3,10 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TodosModule } from './todos/todos.module';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { TodosModule } from './todos/todos.module';
 import { SchedulesModule } from './schedules/schedules.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,8 +20,9 @@ import { SchedulesModule } from './schedules/schedules.module';
       password: process.env.RDS_PASSWORD,
       database: process.env.RDS_DB_NAME,
       autoLoadModels: true,
-      // synchronize: true,
+      synchronize: true,
     }),
+    AuthModule,
     UsersModule,
     TodosModule,
     SchedulesModule,

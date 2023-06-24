@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { TodosService } from './todos.service';
 import { Todo } from './todo.model';
 import {
@@ -22,6 +24,7 @@ import {
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   @ApiOperation({ summary: '새 Todo 생성' })
   @ApiBody({ type: Todo, description: 'Todo 정보' })
@@ -30,6 +33,7 @@ export class TodosController {
     return this.todosService.create(todo);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @ApiOperation({ summary: '모든 Todo 조회' })
   @ApiResponse({ status: 200, description: 'Todo 목록 반환', type: [Todo] })
@@ -37,6 +41,7 @@ export class TodosController {
     return this.todosService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @ApiOperation({ summary: 'ID로 Todo 조회' })
   @ApiParam({ name: 'id', required: true, description: '조회할 Todo의 ID' })
@@ -49,6 +54,7 @@ export class TodosController {
     return this.todosService.findOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   @ApiOperation({ summary: 'Todo 정보 수정' })
   @ApiParam({ name: 'id', required: true, description: '수정할 Todo의 ID' })
@@ -58,6 +64,7 @@ export class TodosController {
     return this.todosService.update(id, todo);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @ApiOperation({ summary: 'Todo 삭제' })
   @ApiParam({ name: 'id', required: true, description: '삭제할 Todo의 ID' })

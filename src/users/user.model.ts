@@ -33,4 +33,14 @@ export class User extends Model {
     allowNull: true,
   })
   birthYear: number;
+
+  @ApiProperty({
+    example: 'http://example.com/path-to-image.jpg',
+    description: '사용자 프로필 사진 URL',
+  })
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  picture: string;
 }

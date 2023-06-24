@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import { User } from './user.model';
 import {
@@ -22,6 +24,7 @@ import {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   @ApiOperation({ summary: '새 사용자 생성' })
   @ApiBody({ type: User, description: '사용자 정보' })
@@ -30,6 +33,7 @@ export class UsersController {
     return this.usersService.create(user);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @ApiOperation({ summary: '모든 사용자 조회' })
   @ApiResponse({ status: 200, description: '사용자 목록 반환', type: [User] })
@@ -37,6 +41,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/id/:id')
   @ApiOperation({ summary: 'ID로 사용자 조회' })
   @ApiParam({ name: 'id', required: true, description: '조회할 사용자의 ID' })
@@ -49,6 +54,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('/email/:email')
   @ApiOperation({ summary: 'Email로 사용자 조회' })
   @ApiParam({
@@ -65,6 +71,7 @@ export class UsersController {
     return this.usersService.findOneByEmail(email);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put('/id/:id')
   @ApiOperation({ summary: '사용자 정보 수정' })
   @ApiParam({ name: 'id', required: true, description: '수정할 사용자의 ID' })
@@ -78,6 +85,7 @@ export class UsersController {
     return this.usersService.update(id, user);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete('/id/:id')
   @ApiOperation({ summary: '사용자 삭제' })
   @ApiParam({ name: 'id', required: true, description: '삭제할 사용자의 ID' })

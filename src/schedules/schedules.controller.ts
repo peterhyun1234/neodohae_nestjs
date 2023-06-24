@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { SchedulesService } from './schedules.service';
 import { Schedule } from './schedule.model';
 import {
@@ -22,6 +24,7 @@ import {
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   @ApiOperation({ summary: '새 Schedule 생성' })
   @ApiBody({ type: Schedule, description: 'Schedule 정보' })
@@ -30,6 +33,7 @@ export class SchedulesController {
     return this.schedulesService.create(schedule);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   @ApiOperation({ summary: '모든 Schedule 조회' })
   @ApiResponse({
@@ -41,6 +45,7 @@ export class SchedulesController {
     return this.schedulesService.findAll();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @ApiOperation({ summary: 'ID로 Schedule 조회' })
   @ApiParam({ name: 'id', required: true, description: '조회할 Schedule의 ID' })
@@ -53,6 +58,7 @@ export class SchedulesController {
     return this.schedulesService.findOne(id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   @ApiOperation({ summary: 'Schedule 정보 수정' })
   @ApiParam({ name: 'id', required: true, description: '수정할 Schedule의 ID' })
@@ -66,6 +72,7 @@ export class SchedulesController {
     return this.schedulesService.update(id, schedule);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @ApiOperation({ summary: 'Schedule 삭제' })
   @ApiParam({ name: 'id', required: true, description: '삭제할 Schedule의 ID' })
