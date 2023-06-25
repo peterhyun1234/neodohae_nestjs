@@ -1,4 +1,10 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BeforeCreate,
+  Column,
+  DataType,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Table
@@ -6,7 +12,7 @@ export class User extends Model {
   @ApiProperty({ example: 'username', description: '사용자 이름' })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
   })
   username: string;
 
@@ -14,7 +20,7 @@ export class User extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    unique: true,
+    unique: 'providerEmail',
   })
   email: string;
 
@@ -46,4 +52,19 @@ export class User extends Model {
     allowNull: true,
   })
   picture: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: 'providerEmail',
+  })
+  provider: string;
+
+  @BeforeCreate
+  static generateUsername(user: User) {
+    if (!user.username) {
+      const currentUser = '룸메 ' + user.id;
+      user.username = currentUser;
+    }
+  }
 }
