@@ -3,11 +3,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
+  const app = await NestFactory.create(AppModule, { cors: true });
   const options = new DocumentBuilder()
-    .setTitle('NestJS neodohae API')
-    .setDescription('NestJS에서 neodohae를 위한 API')
+    .setTitle('neodohae API')
+    .setDescription('neodohae를 위한 API')
     .setVersion('1.0')
     .build();
 

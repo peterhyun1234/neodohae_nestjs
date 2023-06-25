@@ -15,14 +15,14 @@ export class Room extends Model {
   @ApiProperty({ example: 'room_name', description: '방 이름' })
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
   })
   roomName: string;
 
   @ApiProperty({ example: 'invite_code', description: '초대 코드' })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: true,
   })
   inviteCode: string;

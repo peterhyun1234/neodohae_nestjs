@@ -46,7 +46,7 @@ export class RoomsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
+  @Get('/id/:id')
   @ApiOperation({ summary: 'ID로 Room 조회' })
   @ApiParam({ name: 'id', required: true, description: '조회할 Room의 ID' })
   @ApiResponse({
@@ -59,7 +59,7 @@ export class RoomsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':inviteCode')
+  @Get('/inviteCode/:inviteCode')
   @ApiOperation({ summary: 'Invite Code로 Room 조회' })
   @ApiParam({
     name: 'inviteCode',
@@ -76,7 +76,7 @@ export class RoomsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Put(':id')
+  @Put('/id/:id')
   @ApiOperation({ summary: 'Room 정보 수정' })
   @ApiParam({ name: 'id', required: true, description: '수정할 Room의 ID' })
   @ApiBody({ type: Room, description: '수정할 Room 정보' })
@@ -90,7 +90,7 @@ export class RoomsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':id')
+  @Delete('/id/:id')
   @ApiOperation({ summary: 'Room 삭제' })
   @ApiParam({ name: 'id', required: true, description: '삭제할 Room의 ID' })
   @ApiResponse({
