@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TodosModule } from './todos/todos.module';
 import { SchedulesModule } from './schedules/schedules.module';
+import { RoomsModule } from './rooms/rooms.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,6 +27,7 @@ import { SchedulesModule } from './schedules/schedules.module';
     UsersModule,
     TodosModule,
     SchedulesModule,
+    RoomsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

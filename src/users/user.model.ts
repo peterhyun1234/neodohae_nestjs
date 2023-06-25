@@ -4,8 +4,11 @@ import {
   DataType,
   Model,
   Table,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
+import { Room } from 'src/rooms/room.model';
 
 @Table
 export class User extends Model {
@@ -59,6 +62,13 @@ export class User extends Model {
     unique: 'providerEmail',
   })
   provider: string;
+
+  @ForeignKey(() => Room)
+  @Column
+  roomId: number;
+
+  @BelongsTo(() => Room)
+  room: Room;
 
   @BeforeCreate
   static generateUsername(user: User) {
