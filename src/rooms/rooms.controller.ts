@@ -59,6 +59,23 @@ export class RoomsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get(':inviteCode')
+  @ApiOperation({ summary: 'Invite Code로 Room 조회' })
+  @ApiParam({
+    name: 'inviteCode',
+    required: true,
+    description: '조회할 Room의 Invite Code',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '해당 Invite Code의 Room 정보 반환',
+    type: Room,
+  })
+  findOneByInviteCode(@Param('inviteCode') inviteCode: string) {
+    return this.roomsService.findOneByInviteCode(inviteCode);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   @ApiOperation({ summary: 'Room 정보 수정' })
   @ApiParam({ name: 'id', required: true, description: '수정할 Room의 ID' })

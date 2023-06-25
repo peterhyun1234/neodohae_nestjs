@@ -17,6 +17,10 @@ export class RoomsService {
     return this.roomModel.findByPk(id);
   }
 
+  async findOneByInviteCode(inviteCode: string): Promise<Room> {
+    return this.roomModel.findOne({ where: { inviteCode } });
+  }
+
   async create(room: Partial<Room>): Promise<Room> {
     return this.roomModel.create(room);
   }
