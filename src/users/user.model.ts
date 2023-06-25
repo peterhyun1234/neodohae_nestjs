@@ -63,7 +63,8 @@ export class User extends Model {
   @BeforeCreate
   static generateUsername(user: User) {
     if (!user.username) {
-      const currentUser = '룸메 ' + user.id;
+      const randomInteger = Math.floor(Math.random() * 100000);
+      const currentUser = '룸메 ' + randomInteger;
       user.username = currentUser;
     }
   }

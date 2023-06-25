@@ -23,8 +23,11 @@ export class UsersService {
     return this.userModel.findByPk(id);
   }
 
-  async findOneByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ where: { email } });
+  async findOneByEmailAndProvider(
+    email: string,
+    provider: string,
+  ): Promise<User> {
+    return this.userModel.findOne({ where: { email, provider } });
   }
 
   // UPDATE

@@ -55,20 +55,28 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('/email/:email')
-  @ApiOperation({ summary: 'Email로 사용자 조회' })
+  @Get('/email/:email/provider/:provider')
+  @ApiOperation({ summary: 'Email과 Provider로 사용자 조회' })
   @ApiParam({
     name: 'email',
     required: true,
     description: '조회할 사용자의 Email',
   })
+  @ApiParam({
+    name: 'provider',
+    required: true,
+    description: '조회할 사용자의 Provider',
+  })
   @ApiResponse({
     status: 200,
-    description: '해당 Email의 사용자 정보 반환',
+    description: '해당 Email과 Provider의 사용자 정보 반환',
     type: User,
   })
-  findOneByEmail(@Param('email') email: string) {
-    return this.usersService.findOneByEmail(email);
+  findOneByEmailAndProvider(
+    @Param('email') email: string,
+    @Param('provider') provider: string,
+  ) {
+    return this.usersService.findOneByEmailAndProvider(email, provider);
   }
 
   @UseGuards(AuthGuard('jwt'))
