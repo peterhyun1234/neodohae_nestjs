@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { TodosModule } from './todos/todos.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { RoomsModule } from './rooms/rooms.module';
+import { MessagesModule } from './messages/messages.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +29,7 @@ import { RoomsModule } from './rooms/rooms.module';
     RoomsModule,
     TodosModule,
     SchedulesModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
