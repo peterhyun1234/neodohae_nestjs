@@ -26,6 +26,9 @@ export class Message extends Model {
 
   @ApiProperty({ description: '메시지를 보낸 사용자' })
   @ForeignKey(() => User)
+  @Column({
+    onDelete: 'CASCADE',
+  })
   @Column
   senderId: number;
 

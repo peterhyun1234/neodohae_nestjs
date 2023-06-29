@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 
@@ -9,12 +13,10 @@ export class UsersService {
     private userModel: typeof User,
   ) {}
 
-  // CREATE
   async create(user: Partial<User>): Promise<User> {
     return this.userModel.create(user);
   }
 
-  // READ
   async findAll(): Promise<User[]> {
     return this.userModel.findAll();
   }
@@ -36,7 +38,6 @@ export class UsersService {
     });
   }
 
-  // UPDATE
   async update(id: string, user: Partial<User>): Promise<number> {
     const [affectedCount] = await this.userModel.update(user, {
       where: { id },
@@ -44,9 +45,21 @@ export class UsersService {
     return affectedCount;
   }
 
-  // DELETE
   async remove(id: string): Promise<void> {
     const user = await this.findOne(id);
     await user.destroy();
+  }
+
+  async leaveRoom(userId: string, roomId: string): Promise<User> {
+    const user = await this.findOne(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (user.roomId !== Number(roomId)) {
+      throw new BadRequestException('User is not in the specified room');
+    }
+    user.roomId = null;
+    await user.save();
+    return user;
   }
 }

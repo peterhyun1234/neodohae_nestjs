@@ -20,8 +20,6 @@ export class MessagesGateway {
 
   @SubscribeMessage('message')
   async handleMessage(client: any, payload: any): Promise<void> {
-    console.log(client);
-    console.log(payload);
     const message = await this.messagesService.create(payload);
     this.server.emit('newMessage', message);
   }
