@@ -30,6 +30,12 @@ export class UsersService {
     return this.userModel.findOne({ where: { email, provider } });
   }
 
+  async findAllByRoomId(roomId: number): Promise<User[]> {
+    return this.userModel.findAll({
+      where: { roomId: roomId },
+    });
+  }
+
   // UPDATE
   async update(id: string, user: Partial<User>): Promise<number> {
     const [affectedCount] = await this.userModel.update(user, {

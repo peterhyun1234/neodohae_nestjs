@@ -10,7 +10,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RoomsService } from './rooms.service';
+import { UsersService } from '../users/users.service';
 import { Room } from './room.model';
+import { User } from '../users/user.model';
 import {
   ApiBody,
   ApiOperation,
@@ -22,7 +24,10 @@ import {
 @ApiTags('rooms')
 @Controller('rooms')
 export class RoomsController {
-  constructor(private readonly roomsService: RoomsService) {}
+  constructor(
+    private readonly roomsService: RoomsService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
@@ -73,6 +78,23 @@ export class RoomsController {
   })
   findOneByInviteCode(@Param('inviteCode') inviteCode: string) {
     return this.roomsService.findOneByInviteCode(inviteCode);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id/users')
+  @ApiOperation({ summary: 'Room에 속한 모든 룸메이트 조회' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: '룸메이트를 조회할 Room의 ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '해당 Room의 룸메이트 정보 반환',
+    type: [User],
+  })
+  findAllByRoomId(@Param('id') id: string) {
+    return this.usersService.findAllByRoomId(+id);
   }
 
   @UseGuards(AuthGuard('jwt'))
