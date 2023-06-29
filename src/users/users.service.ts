@@ -41,6 +41,7 @@ export class UsersService {
   async update(id: string, user: Partial<User>): Promise<number> {
     const [affectedCount] = await this.userModel.update(user, {
       where: { id },
+      individualHooks: true,
     });
     return affectedCount;
   }

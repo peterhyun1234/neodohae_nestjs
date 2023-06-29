@@ -1,5 +1,6 @@
 import {
   BeforeCreate,
+  BeforeUpdate,
   Column,
   DataType,
   Model,
@@ -9,6 +10,19 @@ import {
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Room } from 'src/rooms/room.model';
+
+const colors = [
+  '#ffb3b3',
+  '#ffdcb3',
+  '#c0ce92',
+  '#a6d497',
+  '#92d1ab',
+  '#b3dfff',
+  '#98dbd7',
+  '#b7b3ff',
+  '#e2b3ff',
+  '#ffb3e9',
+];
 
 @Table
 export class User extends Model {
@@ -63,6 +77,12 @@ export class User extends Model {
   })
   provider: string;
 
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  color: string;
+
   @ForeignKey(() => Room)
   @Column
   roomId: number;
@@ -76,6 +96,31 @@ export class User extends Model {
       const randomInteger = Math.floor(Math.random() * 100000);
       const currentUser = '룸메 ' + randomInteger;
       user.username = currentUser;
+    }
+  }
+
+  @BeforeUpdate
+  static async assignColor(user: User) {
+    if (user.roomId !== undefined && user.roomId !== null) {
+      const roomUsers = await User.findAll({
+        where: { roomId: user.roomId },
+      });
+      const usedColors = roomUsers.map((user) => user.color);
+      const availableColors = colors.filter(
+        (color) => !usedColors.includes(color),
+      );
+
+      let colorToAssign;
+      if (availableColors.length > 0) {
+        const randomIndex = Math.floor(Math.random() * availableColors.length);
+        colorToAssign = availableColors[randomIndex];
+      } else {
+        colorToAssign = '#a0a0a0';
+      }
+
+      user.color = colorToAssign;
+    } else if (user.roomId === null) {
+      user.color = null;
     }
   }
 }
