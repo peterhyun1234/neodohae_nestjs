@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Message } from './message.model';
 
@@ -27,6 +27,14 @@ export class MessagesService {
 
   async findOneById(id: number): Promise<Message> {
     return this.messageModel.findOne({ where: { id } });
+  }
+
+  async findOneByRoomId(roomId: number): Promise<Message[]> {
+    const messages = await this.messageModel.findAll({ where: { roomId } });
+    if (!messages) {
+      throw new NotFoundException(`Messages with roomId ${roomId} not found`);
+    }
+    return messages;
   }
 
   async remove(id: number): Promise<void> {

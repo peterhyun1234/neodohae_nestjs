@@ -55,7 +55,7 @@ export class MessagesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
+  @Get('id/:id')
   @ApiOperation({ summary: 'ID로 메시지 가져오기' })
   @ApiParam({
     name: 'id',
@@ -72,7 +72,24 @@ export class MessagesController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':id')
+  @Get('room/:roomId')
+  @ApiOperation({ summary: 'roomId로 메시지 가져오기' })
+  @ApiParam({
+    name: 'roomId',
+    required: true,
+    description: '메시지를 가져올 방의 ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '지정된 roomId의 메시지를 반환합니다.',
+    type: [Message],
+  })
+  async findByRoomId(@Param('roomId') roomId: number): Promise<Message[]> {
+    return this.messagesService.findOneByRoomId(roomId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete('id/:id')
   @ApiOperation({ summary: '메시지 삭제' })
   @ApiParam({
     name: 'id',
