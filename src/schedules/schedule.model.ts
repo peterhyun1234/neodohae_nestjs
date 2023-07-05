@@ -1,5 +1,13 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+  Model,
+} from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/users/user.model';
 
 @Table
 export class Schedule extends Model {
@@ -13,6 +21,8 @@ export class Schedule extends Model {
   @ApiProperty({ description: '설명' })
   @Column({
     type: DataType.TEXT,
+    allowNull: true,
+    defaultValue: '',
   })
   description: string;
 
@@ -20,6 +30,16 @@ export class Schedule extends Model {
   @Column({
     type: DataType.DATE,
     allowNull: false,
+    get() {
+      const rawValue = this.getDataValue('startTime');
+      if (rawValue) {
+        return rawValue.toISOString().split('.')[0];
+      }
+      return rawValue;
+    },
+    set(value: Date) {
+      this.setDataValue('startTime', new Date(value));
+    },
   })
   startTime: Date;
 
@@ -27,6 +47,27 @@ export class Schedule extends Model {
   @Column({
     type: DataType.DATE,
     allowNull: false,
+    get() {
+      const rawValue = this.getDataValue('endTime');
+      if (rawValue) {
+        return rawValue.toISOString().split('.')[0];
+      }
+      return rawValue;
+    },
+    set(value: Date) {
+      this.setDataValue('endTime', new Date(value));
+    },
   })
   endTime: Date;
+
+  @ApiProperty({ description: '사용자 ID' })
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  userId: number;
+
+  @BelongsTo(() => User)
+  user: User;
 }

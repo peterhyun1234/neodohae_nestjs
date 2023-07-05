@@ -98,6 +98,23 @@ export class RoomsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get(':id/schedules')
+  @ApiOperation({ summary: 'Room에 속한 모든 스케줄 조회' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: '스케줄을 조회할 Room의 ID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '해당 Room의 스케줄 정보 반환',
+    type: [Room],
+  })
+  findSchedulesByRoomId(@Param('id') id: string) {
+    return this.roomsService.findSchedulesByRoomId(+id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Put('/id/:id')
   @ApiOperation({ summary: 'Room 정보 수정' })
   @ApiParam({ name: 'id', required: true, description: '수정할 Room의 ID' })

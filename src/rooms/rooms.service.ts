@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Room } from './room.model';
+import { User } from 'src/users/user.model';
+import { Schedule } from 'src/schedules/schedule.model';
 
 @Injectable()
 export class RoomsService {
@@ -19,6 +21,25 @@ export class RoomsService {
 
   async findOneByInviteCode(inviteCode: string): Promise<Room> {
     return this.roomModel.findOne({ where: { inviteCode } });
+  }
+
+  async findSchedulesByRoomId(roomId: number): Promise<Room> {
+    const room = await this.roomModel.findOne({
+      where: { id: roomId },
+      include: [
+        {
+          model: User,
+          include: [Schedule],
+          attributes: ['username', 'color'],
+        },
+      ],
+    });
+
+    if (!room) {
+      throw new NotFoundException(`Room with ID ${roomId} not found.`);
+    }
+
+    return room;
   }
 
   async create(room: Partial<Room>): Promise<Room> {

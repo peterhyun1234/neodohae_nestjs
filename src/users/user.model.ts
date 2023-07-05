@@ -7,9 +7,12 @@ import {
   Table,
   ForeignKey,
   BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Room } from 'src/rooms/room.model';
+import { Message } from 'src/messages/message.model';
+import { Schedule } from 'src/schedules/schedule.model';
 
 const colors = [
   '#ffb3b3',
@@ -89,6 +92,12 @@ export class User extends Model {
 
   @BelongsTo(() => Room)
   room: Room;
+
+  @HasMany(() => Message, { onDelete: 'CASCADE' })
+  messages: Message[];
+
+  @HasMany(() => Schedule, { onDelete: 'CASCADE' })
+  schedules: Schedule[];
 
   @BeforeCreate
   static generateUsername(user: User) {
