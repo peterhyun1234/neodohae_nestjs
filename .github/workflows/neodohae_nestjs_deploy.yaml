@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout neodohae_nestjs repository
       uses: actions/checkout@v2
 
     - name: Configure AWS credentials
@@ -48,13 +48,29 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    - name: Install and configure AWS CLI
-      run: |
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install --update
+    - name: Checkout neodohae_helm_charts repository
+      uses: actions/checkout@v2
+      with:
+        repository: peterhyun1234/neodohae_helm_charts
+        persist-credentials: false
+        fetch-depth: 0
 
-    - name: Deploy to EKS
+    - name: Install yq
       run: |
-        aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
-        kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} ${{ env.CONTAINER_NAME }}=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        sudo wget -O /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.6.1/yq_linux_amd64
+        sudo chmod +x /usr/bin/yq
+
+    - name: Update values.yaml and push to repository
+      env:
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        yq e ".image.tag = env(IMAGE_TAG)" -i neodohae_nestjs/values.yaml
+        cat neodohae_nestjs/values.yaml
+
+        git config --global user.name 'peter jeon'
+        git config --global user.email 'peterhyun1234@gmail.com'
+
+        git add .
+        git commit -m "feat: update image tag to ${IMAGE_TAG}" || echo "No changes to commit"
+        git push https://${{ secrets.PAT }}@github.com/peterhyun1234/neodohae_helm_charts.git
+
