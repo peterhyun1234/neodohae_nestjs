@@ -13,6 +13,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Room } from 'src/rooms/room.model';
 import { Message } from 'src/messages/message.model';
 import { Schedule } from 'src/schedules/schedule.model';
+import { TodoUserMap } from 'src/todoUserMaps/todoUserMap.model';
 
 const colors = [
   '#ffb3b3',
@@ -98,6 +99,9 @@ export class User extends Model {
 
   @HasMany(() => Schedule, { onDelete: 'CASCADE' })
   schedules: Schedule[];
+
+  @HasMany(() => TodoUserMap)
+  todoUserMaps: TodoUserMap[];
 
   @BeforeCreate
   static generateUsername(user: User) {
