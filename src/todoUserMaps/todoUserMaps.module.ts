@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Todo } from './todo.model';
+import { TodoUserMap } from './todoUserMap.model';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Todo])],
+  imports: [SequelizeModule.forFeature([TodoUserMap])],
 })
-export class TodosModule {}
+export class TodoUserMapsModule {}

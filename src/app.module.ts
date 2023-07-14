@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TodosModule } from './todos/todos.module';
+import { TodoUserMapsModule } from './todoUserMaps/todoUserMaps.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
@@ -28,6 +29,7 @@ import { MessagesModule } from './messages/messages.module';
     UsersModule,
     RoomsModule,
     TodosModule,
+    TodoUserMapsModule,
     SchedulesModule,
     MessagesModule,
   ],

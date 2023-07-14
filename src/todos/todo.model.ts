@@ -1,44 +1,90 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+  HasMany,
+} from 'sequelize-typescript';
+import { User } from 'src/users/user.model';
+import { TodoUserMap } from 'src/todoUserMaps/todoUserMap.model';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Table
+export enum Status {
+  TODO = 'TODO',
+  DOING = 'DOING',
+  DONE = 'DONE',
+}
+
+export enum RepeatType {
+  NONE = 'NONE',
+  DAILY = 'DAILY',
+  WEEKLY = 'WEEKLY',
+  MONTHLY = 'MONTHLY',
+  YEARLY = 'YEARLY',
+}
+
+@Table({
+  tableName: 'Todos',
+})
 export class Todo extends Model {
-  @ApiProperty({ description: '제목' })
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @ApiProperty({ example: 'Title', description: 'Todo의 제목' })
+  @Column({ allowNull: false })
   title: string;
 
-  @ApiProperty({ description: '설명' })
-  @Column({
-    type: DataType.TEXT,
-  })
+  @ApiProperty({ example: 'Description', description: 'Todo의 설명' })
+  @Column
   description: string;
 
-  @ApiProperty({ description: '마감일' })
-  @Column({
-    type: DataType.DATE,
+  @ApiProperty({
+    example: '2023-07-10T00:00:00Z',
+    description: 'Todo 시작 시간',
   })
-  dueDate: Date;
+  @Column({ allowNull: false })
+  startTime: Date;
 
-  @ApiProperty({ description: '반복 주기' })
-  @Column({
-    type: DataType.STRING,
+  @ApiProperty({
+    example: '2023-07-11T00:00:00Z',
+    description: 'Todo 종료 시간',
   })
-  repeatCycle: string;
+  @Column({ allowNull: false })
+  endTime: Date;
 
-  @ApiProperty({ description: '룸메이트' })
+  @ApiProperty({ example: 'TODO', description: 'Todo의 상태', enum: Status })
   @Column({
-    type: DataType.STRING,
+    type: DataType.ENUM('TODO', 'DOING', 'DONE'),
+    defaultValue: 'TODO',
   })
-  roommate: string;
+  status: Status;
 
-  @ApiProperty({ description: '상태', enum: ['To-Do', 'Doing', 'Done'] })
-  @Column({
-    type: DataType.ENUM,
-    values: ['To-Do', 'Doing', 'Done'],
-    defaultValue: 'To-Do',
+  @ApiProperty({ example: 1, description: '반복 그룹 ID' })
+  @Column
+  repeatGroupId: number;
+
+  @ApiProperty({
+    example: '2023-07-20T00:00:00Z',
+    description: '반복 종료 시간',
   })
-  status: string;
+  @Column
+  repeatEndTime: Date;
+
+  @ApiProperty({ example: 'NONE', description: '반복 유형', enum: RepeatType })
+  @Column({
+    type: DataType.ENUM('NONE', 'DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY'),
+    defaultValue: 'NONE',
+  })
+  repeatType: RepeatType;
+
+  @ApiProperty({ example: 1, description: '사용자 ID' })
+  @ForeignKey(() => User)
+  @Column
+  userId: number;
+
+  @BelongsTo(() => User)
+  user: User;
+
+  @ApiProperty({ description: 'Todo 사용자 맵 리스트' })
+  @HasMany(() => TodoUserMap)
+  todoUserMaps: TodoUserMap[];
 }
