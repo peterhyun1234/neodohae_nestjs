@@ -5,12 +5,14 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User)
     private userModel: typeof User,
+    private readonly subscriptionsService: SubscriptionsService,
   ) {}
 
   async create(user: Partial<User>): Promise<User> {
@@ -43,6 +45,18 @@ export class UsersService {
       where: { id },
       individualHooks: true,
     });
+    if (affectedCount > 0 && user.roomId) {
+      const roomUsers = await this.findAllByRoomId(user.roomId);
+      const updatedUser = await this.findOne(id);
+      const userIds = roomUsers.map((user) => user.id);
+      userIds.forEach((userId) => {
+        this.subscriptionsService.sendNotificationToUser(userId, {
+          title: '새로운 룸메이트',
+          body: `${updatedUser.username}님이 룸메이트가 되었습니다.}`,
+        });
+        //TODO: 알림함에 위 정보 저장 notifications
+      });
+    }
     return affectedCount;
   }
 

@@ -15,6 +15,8 @@ import { Message } from 'src/messages/message.model';
 import { Schedule } from 'src/schedules/schedule.model';
 import { Todo } from 'src/todos/todo.model';
 import { TodoUserMap } from 'src/todoUserMaps/todoUserMap.model';
+import { Subscription } from 'src/subscriptions/subscription.model';
+import { Notification } from 'src/notifications/notification.model';
 
 const colors = [
   '#ffb3b3',
@@ -106,6 +108,12 @@ export class User extends Model {
 
   @HasMany(() => TodoUserMap, { onDelete: 'CASCADE' })
   todoUserMaps: TodoUserMap[];
+
+  @HasMany(() => Subscription, { onDelete: 'CASCADE' })
+  subscriptions: Subscription[];
+
+  @HasMany(() => Notification, { onDelete: 'CASCADE' })
+  notifications: Notification[];
 
   @BeforeCreate
   static generateUsername(user: User) {
