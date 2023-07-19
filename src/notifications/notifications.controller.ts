@@ -60,6 +60,17 @@ export class NotificationsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Put('read/:userId')
+  @ApiOperation({ summary: '알림 읽음 처리' })
+  @ApiResponse({
+    status: 200,
+    description: '알림이 성공적으로 읽음 처리되었습니다.',
+  })
+  markAllAsRead(@Param('userId') userId: number) {
+    return this.notificationsService.markAllAsRead(userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   @ApiOperation({ summary: '알림 삭제' })
   @ApiResponse({
