@@ -4,12 +4,10 @@ import { MessagesController } from './messages.controller';
 import { MessagesGateway } from './messages.gateway';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Message } from './message.model';
-import { Subscription } from '../subscriptions/subscription.model';
-import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Message, Subscription])],
+  imports: [SequelizeModule.forFeature([Message])],
   controllers: [MessagesController],
-  providers: [MessagesService, MessagesGateway, SubscriptionsService],
+  providers: [MessagesService, MessagesGateway],
 })
 export class MessagesModule {}

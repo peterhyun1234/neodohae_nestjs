@@ -11,6 +11,7 @@ import { TodoUserMapsModule } from './todoUserMaps/todoUserMaps.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { MessagesModule } from './messages/messages.module';
+import { NotificationsModule } from './notifications/notifications.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +35,7 @@ import { MessagesModule } from './messages/messages.module';
     SchedulesModule,
     SubscriptionsModule,
     MessagesModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

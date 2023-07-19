@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Subscription } from './subscription.model';
+// import { NotificationsService } from 'src/notifications/notifications.service';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const webPush = require('web-push');
@@ -50,6 +51,12 @@ export class SubscriptionsService {
       where: { userId },
     });
     if (!subscriptions) throw new Error('Subscription not found');
+
+    // this.notificationsService.create({
+    //   userId: userId,
+    //   title: payload.title,
+    //   body: payload.body,
+    // });
 
     return Promise.all(
       subscriptions.map((subscription) =>
