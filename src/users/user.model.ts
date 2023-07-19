@@ -109,12 +109,6 @@ export class User extends Model {
   @HasMany(() => TodoUserMap, { onDelete: 'CASCADE' })
   todoUserMaps: TodoUserMap[];
 
-  @HasMany(() => Subscription, { onDelete: 'CASCADE' })
-  subscriptions: Subscription[];
-
-  @HasMany(() => Notification, { onDelete: 'CASCADE' })
-  notifications: Notification[];
-
   @BeforeCreate
   static generateUsername(user: User) {
     if (!user.username) {
