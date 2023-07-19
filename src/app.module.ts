@@ -5,10 +5,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { RoomsModule } from './rooms/rooms.module';
 import { TodosModule } from './todos/todos.module';
 import { TodoUserMapsModule } from './todoUserMaps/todoUserMaps.module';
 import { SchedulesModule } from './schedules/schedules.module';
-import { RoomsModule } from './rooms/rooms.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { MessagesModule } from './messages/messages.module';
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { MessagesModule } from './messages/messages.module';
     TodosModule,
     TodoUserMapsModule,
     SchedulesModule,
+    SubscriptionsModule,
     MessagesModule,
   ],
   controllers: [AppController],
