@@ -18,15 +18,29 @@ export class MessagesGateway {
 
   constructor(private messagesService: MessagesService) {}
 
+  @SubscribeMessage('joinRoom')
+  async handleRoomJoin(client: any, roomId: string): Promise<void> {
+    client.join(roomId);
+  }
+
+  @SubscribeMessage('leaveRoom')
+  async handleRoomLeave(client: any, roomId: string): Promise<void> {
+    client.leave(roomId);
+  }
+
   @SubscribeMessage('message')
   async handleMessage(client: any, payload: any): Promise<void> {
+    const { roomId } = payload;
     const message = await this.messagesService.create(payload);
-    this.server.emit('newMessage', message);
+    this.server.to(roomId).emit('newMessage', message);
   }
 
   @SubscribeMessage('delete')
-  async handleMessageDelete(client: any, payload: any): Promise<void> {
-    await this.messagesService.remove(payload.id);
-    this.server.emit('messageDeleted', payload.id);
+  async handleMessageDelete(
+    client: any,
+    { roomId, messageId }: any,
+  ): Promise<void> {
+    await this.messagesService.remove(messageId);
+    this.server.to(roomId).emit('messageDeleted', messageId);
   }
 }

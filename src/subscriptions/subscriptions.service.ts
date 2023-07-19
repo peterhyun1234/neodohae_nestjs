@@ -47,18 +47,23 @@ export class SubscriptionsService {
     return webPush.sendNotification(subscription, JSON.stringify(payload));
   }
 
-  async sendNotificationToUser(userId: number, payload: any) {
+  async sendNotificationToUser(
+    userId: number,
+    payload: any,
+    dontSave?: boolean,
+  ) {
     const subscriptions = await this.subscriptionModel.findAll({
       where: { userId },
     });
     if (!subscriptions) throw new Error('Subscription not found');
 
-    this.notificationsService.create({
-      userId: userId,
-      title: payload.title,
-      body: payload.body,
-    });
-
+    if (!dontSave) {
+      this.notificationsService.create({
+        userId: userId,
+        title: payload.title,
+        body: payload.body,
+      });
+    }
     return Promise.all(
       subscriptions.map((subscription) =>
         webPush.sendNotification(subscription, JSON.stringify(payload)),

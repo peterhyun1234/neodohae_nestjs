@@ -1,23 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Message } from './message.model';
+import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectModel(Message)
     private messageModel: typeof Message,
+    private readonly subscriptionsService: SubscriptionsService,
+    private readonly usersService: UsersService,
   ) {}
 
-  async create(createMessageDto: {
+  async create(creatingMessage: {
     senderId: number;
     roomId: number;
     content: string;
   }): Promise<Message> {
+    const content = creatingMessage.content;
+    const userId = creatingMessage.senderId;
+    const user = await this.usersService.findOne(userId);
+    const roomId = creatingMessage.roomId;
+
+    const roomUsers = await this.usersService.findAllByRoomId(roomId);
+    const userIds = roomUsers.map((user) => user.id);
+    const limitedContent =
+      content.length > 20 ? content.substring(0, 20) + '...' : content;
+    userIds.forEach((id) => {
+      if (id === userId) return;
+      const payload = {
+        title: `너도해 채팅`,
+        body: `${user.username}: ${limitedContent}`,
+      };
+      this.subscriptionsService.sendNotificationToUser(id, payload, true);
+    });
+
     const message = new Message();
-    message.content = createMessageDto.content;
-    message.senderId = createMessageDto.senderId;
-    message.roomId = createMessageDto.roomId;
+    message.content = content;
+    message.senderId = userId;
+    message.roomId = roomId;
     return message.save();
   }
 

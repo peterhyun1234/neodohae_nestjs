@@ -23,7 +23,7 @@ export class UsersService {
     return this.userModel.findAll();
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: string | number): Promise<User> {
     return this.userModel.findByPk(id);
   }
 
@@ -49,12 +49,13 @@ export class UsersService {
       const roomUsers = await this.findAllByRoomId(user.roomId);
       const updatedUser = await this.findOne(id);
       const userIds = roomUsers.map((user) => user.id);
-      userIds.forEach((userId) => {
+      userIds.forEach((id) => {
+        if (id === Number(updatedUser.id)) return;
         const payload = {
           title: '새로운 룸메이트',
           body: `${updatedUser.username}님이 룸메이트가 되었습니다.}`,
         };
-        this.subscriptionsService.sendNotificationToUser(userId, payload);
+        this.subscriptionsService.sendNotificationToUser(id, payload);
       });
     }
     return affectedCount;
