@@ -64,10 +64,20 @@ export class SubscriptionsService {
         body: payload.body,
       });
     }
-    return Promise.all(
-      subscriptions.map((subscription) =>
-        webPush.sendNotification(subscription, JSON.stringify(payload)),
-      ),
-    );
+
+    subscriptions.forEach((subscription) => {
+      webPush
+        .sendNotification(subscription, JSON.stringify(payload))
+        .catch(async (err) => {
+          if (err.statusCode === 410) {
+            const curSubscription = await this.subscriptionModel.findByPk(
+              subscription.endpoint,
+            );
+            await curSubscription.destroy();
+          }
+        });
+    });
+
+    return subscriptions;
   }
 }
