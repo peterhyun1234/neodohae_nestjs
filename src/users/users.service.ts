@@ -53,7 +53,7 @@ export class UsersService {
         if (id === Number(updatedUser.id)) return;
         const payload = {
           title: '새로운 룸메이트',
-          body: `${updatedUser.username}님이 룸메이트가 되었습니다.}`,
+          body: `${updatedUser.username}님이 룸메이트가 되었습니다.`,
         };
         this.subscriptionsService.sendNotificationToUser(id, payload);
       });
