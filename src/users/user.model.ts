@@ -15,8 +15,6 @@ import { Message } from 'src/messages/message.model';
 import { Schedule } from 'src/schedules/schedule.model';
 import { Todo } from 'src/todos/todo.model';
 import { TodoUserMap } from 'src/todoUserMaps/todoUserMap.model';
-import { Subscription } from 'src/subscriptions/subscription.model';
-import { Notification } from 'src/notifications/notification.model';
 
 const colors = [
   '#ffb3b3',
