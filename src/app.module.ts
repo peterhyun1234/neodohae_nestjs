@@ -26,6 +26,7 @@ import { NotificationsModule } from './notifications/notifications.module';
       database: process.env.RDS_DB_NAME,
       autoLoadModels: true,
       synchronize: true,
+      logging: process.env.NODE_ENV !== 'production' ? console.log : false,
     }),
     AuthModule,
     UsersModule,

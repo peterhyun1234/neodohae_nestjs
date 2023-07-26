@@ -37,6 +37,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
+        echo "NODE_ENV=production" >> .env.production
         echo "RDS_HOSTNAME=${{ secrets.RDS_HOSTNAME }}" >> .env.production
         echo "RDS_PORT=${{ secrets.RDS_PORT }}" >> .env.production
         echo "RDS_USERNAME=${{ secrets.RDS_USERNAME }}" >> .env.production
