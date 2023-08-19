@@ -64,13 +64,13 @@ export class User extends Model {
 
   @ApiProperty({
     example:
-      'https://neodohaebucket.s3.ap-northeast-2.amazonaws.com/default_profile.jpeg',
+      'https://aiderbucket.s3.ap-northeast-2.amazonaws.com/default_profile.png',
     description: '사용자 프로필 사진 URL',
   })
   @Column({
     type: DataType.STRING,
     defaultValue:
-      'https://neodohaebucket.s3.ap-northeast-2.amazonaws.com/default_profile.jpeg',
+      'https://aiderbucket.s3.ap-northeast-2.amazonaws.com/default_profile.png',
     allowNull: true,
   })
   picture: string;
